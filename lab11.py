@@ -2,7 +2,6 @@ import http.server as srv
 import json
 from gpiozero import AngularServo
 import requests
-
 from time import sleep
 
 # Setup the servo
@@ -46,12 +45,12 @@ function setup() {
 
 # Takes in the HTTP Request
 class ExampleHandler(srv.BaseHTTPRequestHandler):
-    """Runs the everytime a get comes in"""
+    """Runs everytime a get comes in"""
     def do_GET(self):
         if self.path.startswith('/endpoints/server/servo/'):	# Check If Path is Correct
             print(self.path)
             last_slash = self.path.rfind("/")	# Find the Last / in the path
-            value = int(self.path[last_slash+1:])	#The value is after the last slash
+            value = int(self.path[last_slash+1:])	# The value is after the last slash
             self.servo(value)	# Pass The Value To The Servo Function
             
         # Display The Index Page
@@ -63,9 +62,8 @@ class ExampleHandler(srv.BaseHTTPRequestHandler):
         else:
             self.send_error(404, 'Page not found')
 
-
+    """Move The Servo With The Passed Value"""
     def servo(self, value):
-        """Move The Servo With The Passed Value"""
         global s
         angle = value
     
@@ -83,8 +81,6 @@ class ExampleHandler(srv.BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/json')
         self.end_headers()
         self.wfile.write(json.dumps(value_sent).encode())
-        
-        
 
 
 
